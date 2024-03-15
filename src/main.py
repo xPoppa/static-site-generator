@@ -1,1 +1,4 @@
-print("Hello world")
+from textnode import TextNode
+
+
+print(TextNode("miauw", "bold", "http://www.miauw.com"))
