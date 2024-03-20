@@ -41,7 +41,17 @@ def extract_markdown_links(text: str) -> list[tuple[str,str]]:
 def split_nodes_image(nodes: list[TextNode]) -> list[TextNode]:
     for node in nodes:
         matches = extract_markdown_images(node.text)
+        lala = []
+        for m in matches:
+            some_text = node.text.split(f"![{m[0]}]({m[1]})")
+            lala.append(some_text[0])
+        print(f"print lala: {lala}")
         return []
     return []
 
-
+def recurse(tuple_list, text_list):
+    if len(tuple_list) == 0:
+        return
+    m = tuple_list[0]
+    text_list[0].split(f"![{m[0]}]({m[1]})") 
+    return 

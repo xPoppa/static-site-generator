@@ -9,7 +9,7 @@ from textnode import (
         text_type_code,
         text_type_italic
         )
-from inline_markdown_parsing import extract_markdown_images, extract_markdown_links, split_nodes_delimiter
+from inline_markdown_parsing import extract_markdown_images, extract_markdown_links, split_nodes_delimiter, split_nodes_image
 
 class TestSplittingNodes(unittest.TestCase):
     def test_eq(self):
@@ -51,6 +51,14 @@ class TestSplittingNodes(unittest.TestCase):
                     TextNode(text=" word", text_type=text_type_text),
                 ]
         self.assertEqual(splitted_nodes3, test_splitted_nodes3)
+    
+    def test_split_nodes_image(self):
+        node = TextNode(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+            text_type_text,
+        )
+        new_nodes = split_nodes_image([node])
+        
 
 class TestExtractLink(unittest.TestCase):
     def test_extract_markdown_images(self):
@@ -70,6 +78,7 @@ class TestExtractLink(unittest.TestCase):
             ],
             matches,
         )
+
 
 if __name__ == "__main__":
     unittest.main()
