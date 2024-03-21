@@ -2,7 +2,7 @@ from textnode import (
         TextNode,
         text_type_text,
 #        text_type_bold,
-#        text_type_image,
+        text_type_image,
 #        text_type_link,
 #        text_type_code,
 #        text_type_italic
@@ -39,19 +39,22 @@ def extract_markdown_links(text: str) -> list[tuple[str,str]]:
     return re.findall(r"\[(.*?)\]\((.*?)\)", text)
 
 def split_nodes_image(nodes: list[TextNode]) -> list[TextNode]:
+    nodes_list = []
     for node in nodes:
         matches = extract_markdown_images(node.text)
-        lala = []
-        for m in matches:
-            some_text = node.text.split(f"![{m[0]}]({m[1]})")
-            lala.append(some_text[0])
-        print(f"print lala: {lala}")
-        return []
-    return []
+        if len(matches) == 0 :
+            nodes_list.extend([node])
+            continue
+        text_nodes = recurse(matches, [], node.text)
+        nodes_list.extend(text_nodes)
+    return nodes_list
 
-def recurse(tuple_list, text_list):
+def recurse(tuple_list: list[tuple[str,str]], acc: list[TextNode], text: str):
     if len(tuple_list) == 0:
-        return
+        return acc
     m = tuple_list[0]
-    text_list[0].split(f"![{m[0]}]({m[1]})") 
-    return 
+    splitted: list[str] = text.split(f"![{m[0]}]({m[1]})", 1) 
+    if splitted[0] != "":
+        acc.append(TextNode(text=splitted[0], text_type=text_type_text))
+    acc.append(TextNode(text=m[0], text_type=text_type_image, url=m[1]))
+    return recurse(tuple_list[1:], acc, splitted[1]) 

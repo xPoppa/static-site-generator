@@ -4,7 +4,7 @@ from textnode import (
         TextNode,
         text_type_text,
         text_type_bold,
-#        text_type_image,
+        text_type_image,
 #        text_type_link,
         text_type_code,
         text_type_italic
@@ -52,12 +52,62 @@ class TestSplittingNodes(unittest.TestCase):
                 ]
         self.assertEqual(splitted_nodes3, test_splitted_nodes3)
     
+
+class TestImageSplitting(unittest.TestCase):
     def test_split_nodes_image(self):
         node = TextNode(
             "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
             text_type_text,
         )
         new_nodes = split_nodes_image([node])
+
+        self.assertListEqual(
+            [
+                TextNode("This is text with an ", text_type_text),
+                TextNode("image", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" and another ", text_type_text),
+                TextNode(
+                    "second image", text_type_image, "https://i.imgur.com/3elNhQu.png"
+                ),
+            ], new_nodes
+                )
+    def test_split_nodes_image_diff_order(self):
+        node1 = TextNode(
+            "![image](https://i.imgur.com/zjjcJKZ.png) This is text with an and another ![second image](https://i.imgur.com/3elNhQu.png)",
+            text_type_text,
+        )
+        new_nodes1 = split_nodes_image([node1])
+        self.assertListEqual(
+            [
+                TextNode("image", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" This is text with an and another ", text_type_text),
+                TextNode(
+                    "second image", text_type_image, "https://i.imgur.com/3elNhQu.png"
+                ),
+            ], new_nodes1
+            )
+    def test_split_nodes_image_no_image(self):
+        node = TextNode(text="haai ik heb geen image", text_type=text_type_text)
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual([node], new_nodes)
+
+    def test_only_image(self):
+        node = TextNode(text="![image](https://i.imgur.com/zjjcJKZ.png)", text_type=text_type_text)
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual([TextNode(text="image", text_type=text_type_image, url="https://i.imgur.com/zjjcJKZ.png")], new_nodes)
+
+    def test_wrong_image_syntax(self):
+        node = TextNode(text="!image](https://i.imgur.com/zjjcJKZ.png) This is text with an and another ![second image](https://i.imgur.com/3elNhQu.png)", text_type=text_type_text)
+        new_nodes = split_nodes_image([node])
+        print("miauw")
+        self.assertListEqual(
+                [
+                    TextNode(text="!image](https://i.imgur.com/zjjcJKZ.png) This is text with an and another ", text_type=text_type_text),
+                    TextNode(text="second image", text_type=text_type_image, url="https://i.imgur.com/3elNhQu.png")
+                ], new_nodes)
+
+
+        
         
 
 class TestExtractLink(unittest.TestCase):
@@ -82,3 +132,4 @@ class TestExtractLink(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
