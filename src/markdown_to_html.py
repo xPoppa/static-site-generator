@@ -52,7 +52,7 @@ def heading_block_to_html_node(block: str) -> LeafNode:
 def quote_block_to_html_node(block: str) -> ParentNode:
     return ParentNode(tag="blockquote", 
                       children=
-                        text_to_leaf_nodes(block.replace(">", "").replace("\n", "")))
+                        text_to_leaf_nodes(block.replace(">", "").replace("\n", "")).strip())
 
 def code_block_to_html_node(block: str) -> ParentNode:
     return ParentNode(tag="pre", 

@@ -32,7 +32,7 @@ def block_to_block_type(block: str) -> str:
 ## quote
     if block[0] == ">":
         result = []
-        sub_blocks = block.replace("\n", " ")
+        sub_blocks = block.split("\n")
         for sub_block in sub_blocks:
             result.append(sub_block[:1] == ">")
         if result.count(True) == len(result) and result:
