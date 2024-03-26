@@ -21,6 +21,9 @@ def split_nodes_delimiter(old_nodes: list[TextNode], delimiter: str, text_type: 
             continue
         idx2 = node.text.find(delimiter, idx + 1)
         if idx2 == -1:
+            print(node)
+            print(delimiter)
+            print(node.text)
             raise Exception("Invalid markdown syntax closing delimiter not found")
         splitted_text = node.text.split(delimiter)
         nodes = []
@@ -92,7 +95,8 @@ def recurse_links(tuple_list: list[tuple[str,str]], acc: list[TextNode], text: s
 def text_to_textnodes(text: str) -> list[TextNode]:
     node = TextNode(text=text, text_type=text_type_text)
     bold_nodes = split_nodes_delimiter(old_nodes=[node], delimiter="**", text_type=text_type_bold)
-    code_nodes = split_nodes_delimiter(old_nodes=bold_nodes, delimiter="`", text_type=text_type_code)
+    bold_nodes2 = split_nodes_delimiter(old_nodes=bold_nodes, delimiter="__", text_type=text_type_bold)
+    code_nodes = split_nodes_delimiter(old_nodes=bold_nodes2, delimiter="`", text_type=text_type_code)
     italic_nodes = split_nodes_delimiter(old_nodes=code_nodes, delimiter="*", text_type=text_type_italic)
     images = split_nodes_image(italic_nodes)
     links = split_nodes_links(images)

@@ -1,7 +1,10 @@
+from typing import Any, Mapping
+
+
 class HtmlNode:
     def __init__(self, tag: str | None = None,
                  value: str | None = None,
-                 children = None,
+                 children: list[Any] |  None = None,
                  props: dict[str,str | None] | None = None) -> None:
         self.tag = tag
         self.value = value
@@ -49,6 +52,6 @@ class ParentNode(HtmlNode):
             raise ValueError("children required")
         html = ""
         for c in self.children:
-           html += c.to_html() 
+            html += c.to_html() 
         return f"<{self.tag}{self.props_to_html()}>{html}</{self.tag}>"
 
