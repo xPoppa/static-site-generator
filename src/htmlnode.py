@@ -8,7 +8,7 @@ class HtmlNode:
         self.children = children
         self.props = props
 
-    def to_html(self) -> None:
+    def to_html(self) -> str | None:
         raise NotImplementedError
 
     def props_to_html(self) -> str | None:
