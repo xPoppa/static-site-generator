@@ -34,4 +34,3 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
     if text_node.text_type == text_type_image:
         return LeafNode(tag="img", value="", props={"src": text_node.url, "alt": text_node.text})
     raise Exception("Wrong text_type")
-
