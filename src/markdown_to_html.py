@@ -33,20 +33,20 @@ def markdown_to_html(text: str) -> ParentNode:
             children.append(par_block_to_html_node(block))
     return ParentNode(tag="div", children=children)
 
-def heading_block_to_html_node(block: str) -> LeafNode:
+def heading_block_to_html_node(block: str) -> ParentNode:
     if block.startswith("# "):
-        return LeafNode(tag="h1", value=block[2:])
+        return ParentNode(tag="h1", children=text_to_leaf_nodes(block[2:]))
     if block.startswith("## "):
-        return LeafNode(tag="h2", value=block[3:])
+        return ParentNode(tag="h2", children=text_to_leaf_nodes(block[3:]))
     if block.startswith("### "):
-        return LeafNode(tag="h3", value=block[4:])
+        return ParentNode(tag="h3", children=text_to_leaf_nodes(block[4:]))
     if block.startswith("#### "):
-        return LeafNode(tag="h4", value=block[5:])
+        return ParentNode(tag="h4", children=text_to_leaf_nodes(block[5:]))
     if block.startswith("##### "):
-        return LeafNode(tag="h5", value=block[6:])
+        return ParentNode(tag="h5", children=text_to_leaf_nodes(block[6:]))
     if block.startswith("###### "):
-        return LeafNode(tag="h6", value=block[7:])
-    return LeafNode()
+        return ParentNode(tag="h6", children=text_to_leaf_nodes(block[7:]))
+    return ParentNode()
 
 
 def quote_block_to_html_node(block: str) -> ParentNode:
