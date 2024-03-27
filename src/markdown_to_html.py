@@ -52,7 +52,7 @@ def heading_block_to_html_node(block: str) -> LeafNode:
 def quote_block_to_html_node(block: str) -> ParentNode:
     return ParentNode(tag="blockquote", 
                       children=
-                        text_to_leaf_nodes(block.replace(">", "").replace("\n", "")).strip())
+                        text_to_leaf_nodes(block.replace(">", "").replace("\n", "").strip()))
 
 def code_block_to_html_node(block: str) -> ParentNode:
     return ParentNode(tag="pre", 
@@ -74,16 +74,12 @@ def ol_block_to_html_node(block: str) -> ParentNode:
     return ParentNode(tag="ol", 
                       children=map(to_ol_list_item, block.split("\n")))
 def par_block_to_html_node(block: str) -> ParentNode:
-    return ParentNode(tag="p", children=to_leaf_nodes(block.split("\n")))
+    lines = block.split("\n")
+    paragraph = " ".join(lines)
+    children = text_to_leaf_nodes(paragraph)
+    return ParentNode(tag="p", children=children)
 
             ##### HELPERS ######
-def to_leaf_nodes(texts: list[str]) -> list[LeafNode]:
-    leaf_nodes_collection: list[LeafNode] = []
-    for text in texts:
-        leaf_nodes = text_to_leaf_nodes(text.strip())
-        leaf_nodes_collection.extend(leaf_nodes)
-    return leaf_nodes_collection
-
 def text_to_leaf_nodes(text: str) -> list[LeafNode]:
     text_nodes = text_to_textnodes(text)
     leaf_nodes = []
