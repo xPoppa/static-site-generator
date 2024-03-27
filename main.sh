@@ -18,3 +18,4 @@ echo "Argument 2: $arg2"
 
 # Continue with the rest of the script
 pipenv run python src/main.py -f $1 -t $2
+pipenv run python server.py --dir public
